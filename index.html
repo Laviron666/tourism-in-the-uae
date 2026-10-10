@@ -58,7 +58,17 @@
           <div class="desert-card"><img src="assets/desert-journey.png" alt="Путешественники на верблюдах среди золотых дюн на фоне силуэта города" loading="lazy" width="1664" height="2304"><div><span>А ТЫ ЗНАЛ?</span><p>Пустыня — не препятствие.<br>Это целое приключение.</p></div></div>
         </aside>
       </div>
-      <p class="quiz-footnote"><span aria-hidden="true">◌</span> Без регистрации. Ответы сохраняются только в этом браузере.</p>
+      <p class="quiz-footnote"><span aria-hidden="true">◌</span> Без регистрации. Прогресс сохраняется в браузере, итоговый балл — в общей статистике без имени.</p>
+      <section class="community-stats" id="statistics" aria-labelledby="statistics-title">
+        <div class="stats-heading"><div><span class="eyebrow">РЕЗУЛЬТАТЫ НАШИХ ПУТЕШЕСТВЕННИКОВ</span><h3 id="statistics-title">Как проходят тест?</h3></div><button type="button" class="button secondary" id="refresh-stats">Обновить <span aria-hidden="true">↻</span></button></div>
+        <p id="stats-status" role="status">Загружаем общую статистику…</p>
+        <div id="stats-content" hidden>
+          <div class="community-metrics"><div><strong id="stats-participants">—</strong><span>участников</span></div><div><strong id="stats-attempts">—</strong><span>завершённых прохождений</span></div><div><strong id="stats-average">—</strong><span>средний балл из 20</span></div></div>
+          <div class="stats-groups" id="stats-groups"></div>
+          <div class="stats-tables"><details><summary>Распределение по правильным ответам <span aria-hidden="true">+</span></summary><table class="results-table"><thead><tr><th>Правильных ответов</th><th>Прохождений</th></tr></thead><tbody id="stats-distribution"></tbody></table></details><details><summary>Последние 10 результатов <span aria-hidden="true">+</span></summary><table class="results-table"><thead><tr><th>Когда завершён тест</th><th>Результат</th></tr></thead><tbody id="stats-recent"></tbody></table></details></div>
+          <p class="stats-note">Участник учитывается по этому браузеру. Повторный тест — новое прохождение; перезагрузка результата — нет. Учёт начинается с добавления этой статистики.</p>
+        </div>
+      </section>
     </section>
 
     <section class="discover-section section" id="discover" aria-labelledby="discover-title"><div class="container">

@@ -5,6 +5,10 @@
   "description": "Tourism in the UAE — interactive Russian-language educational website",
   "scripts": {
     "dev": "node server.cjs",
-    "check": "node --check app.js && node --check questions.js && node --check server.cjs"
+    "check": "node --check app.js && node --check questions.js && node --check server.cjs && node --check api/results.mjs && node --check lib/quiz-results.cjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.1"
   }
 }

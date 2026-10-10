@@ -5,16 +5,25 @@ const letters = ['А', 'Б', 'В', 'Г'];
 let answers = Array(QUESTIONS.length).fill(null);
 let current = 0;
 let completed = false;
+let attemptId = crypto.randomUUID();
+let statsSubmitted = false;
+let participantId;
+try {
+  participantId = localStorage.getItem('uae-tourism-participant');
+  if (!/^[0-9a-f-]{36}$/i.test(participantId || '')) { participantId = crypto.randomUUID(); localStorage.setItem('uae-tourism-participant',participantId); }
+} catch { participantId = crypto.randomUUID(); }
 try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
   if (saved && Array.isArray(saved.answers) && saved.answers.length === QUESTIONS.length && saved.answers.every(a => a === null || (Number.isInteger(a) && a >= 0 && a < 4)) && Number.isInteger(saved.current) && saved.current >= 0 && saved.current < QUESTIONS.length) {
     answers = saved.answers;
     current = saved.current;
     completed = saved.completed === true && answers.every(a => a !== null);
+    if (/^[0-9a-f-]{36}$/i.test(saved.attemptId || '')) attemptId = saved.attemptId;
+    statsSubmitted = saved.statsSubmitted === true || (completed && !saved.attemptId);
   }
 } catch { /* Работа теста не зависит от доступности хранилища. */ }
 function saveProgress() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({answers, current, completed})); } catch { /* Приватный режим и ограничения браузера не блокируют тест. */ }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({answers, current, completed, attemptId, statsSubmitted})); } catch { /* Приватный режим и ограничения браузера не блокируют тест. */ }
 }
 function animateContent(element) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !element.animate) return;
@@ -96,6 +105,7 @@ function renderResult(focus = false) {
   });
   $('restart-button').addEventListener('click', () => {
     answers = Array(QUESTIONS.length).fill(null); current = 0; completed = false;
+    attemptId = crypto.randomUUID(); statsSubmitted = false;
     saveProgress(); renderQuestion(true);
     $('quiz').scrollIntoView({block:'start'});
   });
@@ -105,7 +115,66 @@ function renderResult(focus = false) {
   });
   if (focus) { $('result-title').focus({preventScroll:true}); $('quiz').scrollIntoView({block:'start'}); animateContent($('result-view')); }
   $('quiz-announcement').textContent = `Результат: ${score} правильных ответов из ${QUESTIONS.length}. ${result.message}`;
+  const sync = document.createElement('p'); sync.id = 'result-sync-status'; sync.className = 'stats-note'; sync.setAttribute('role','status');
+  $('result-view').querySelector('.result-header').append(sync);
+  const statisticsLink = document.createElement('a'); statisticsLink.className = 'button secondary'; statisticsLink.href = '#statistics'; statisticsLink.textContent = 'Общая статистика ↓';
+  $('result-view').querySelector('.result-actions').append(statisticsLink);
+  if (!statsSubmitted) submitResult();
 }
+
+let resultSaving = false;
+async function submitResult() {
+  if (resultSaving || statsSubmitted || !completed) return;
+  resultSaving = true;
+  const submittedId = attemptId;
+  const status = $('result-sync-status');
+  if (status) status.textContent = 'Сохраняем балл в общей статистике…';
+  try {
+    const response = await fetch('/api/results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({participantId,attemptId,answers})});
+    if (!response.ok) throw new Error('Save failed');
+    if (attemptId === submittedId) { statsSubmitted = true; saveProgress(); if (status) status.textContent = 'Твой результат учтён в общей статистике.'; }
+    await loadStatistics();
+  } catch {
+    if (status && attemptId === submittedId) {
+      status.textContent = 'Результат теста готов, но статистику пока не удалось обновить. ';
+      const retry = document.createElement('button'); retry.type = 'button'; retry.className = 'stats-retry'; retry.textContent = 'Сохранить ещё раз'; retry.addEventListener('click',submitResult); status.append(retry);
+    }
+  } finally {
+    resultSaving = false;
+    if (completed && !statsSubmitted && attemptId !== submittedId) submitResult();
+  }
+}
+
+async function loadStatistics() {
+  const button = $('refresh-stats'); button.disabled = true;
+  $('stats-status').textContent = 'Загружаем общую статистику…';
+  try {
+    const response = await fetch('/api/results',{cache:'no-store'});
+    if (!response.ok) throw new Error('Statistics unavailable');
+    const data = await response.json();
+    $('stats-participants').textContent = data.participants.toLocaleString('ru-RU');
+    $('stats-attempts').textContent = data.attempts.toLocaleString('ru-RU');
+    $('stats-average').textContent = data.average === null ? '—' : data.average.toLocaleString('ru-RU');
+    $('stats-groups').replaceChildren();
+    [[16,20,'Отличный результат'],[10,15,'Хороший результат'],[0,9,'Начало путешествия']].forEach(([start,end,label]) => {
+      const count = data.distribution.slice(start,end+1).reduce((sum,n) => sum+n,0);
+      const row = document.createElement('div'); row.className = 'stats-group';
+      const caption = document.createElement('p'); caption.textContent = `${start}–${end} из 20 · ${label}`;
+      const countText = document.createElement('strong'); countText.textContent = `${count} (${data.attempts ? Math.round(count / data.attempts * 100) : 0}%)`;
+      const track = document.createElement('div'); track.className = 'stats-group-track'; const bar = document.createElement('span'); bar.style.width = `${data.attempts ? count/data.attempts*100 : 0}%`; track.append(bar); row.append(caption,countText,track); $('stats-groups').append(row);
+    });
+    const addRow = (parent,left,right) => { const row = document.createElement('tr'); [left,right].forEach(value => { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); }); parent.append(row); };
+    $('stats-distribution').replaceChildren();
+    for (let score=20;score>=0;score--) addRow($('stats-distribution'),`${score} из 20`,data.distribution[score]);
+    $('stats-recent').replaceChildren();
+    data.recent.forEach(result => addRow($('stats-recent'),new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Kyiv'}).format(new Date(result.completedAt)),`${result.score} / 20`));
+    if (!data.recent.length) addRow($('stats-recent'),'Пока нет завершённых тестов','—');
+    $('stats-content').hidden = false;
+    $('stats-status').textContent = data.attempts ? 'Общие результаты всех участников сайта.' : 'Пока никто не завершил тест. Твоё прохождение может стать первым!';
+  } catch { $('stats-status').textContent = 'Статистика временно недоступна. Нажми «Обновить», чтобы попробовать ещё раз.'; }
+  finally { button.disabled = false; }
+}
+$('refresh-stats').addEventListener('click',loadStatistics);
 $('next-button').addEventListener('click', () => {
   if (answers[current] === null) return;
   if (current < QUESTIONS.length - 1) { current++; saveProgress(); renderQuestion(true); }
@@ -170,3 +239,4 @@ $('survey-form').addEventListener('submit', event => {
   $('survey-status').textContent = 'Файл с ответами подготовлен. Передай его организатору исследования.';
 });
 if (completed) renderResult(); else renderQuestion();
+loadStatistics();
