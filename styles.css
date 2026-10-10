@@ -33,6 +33,8 @@
 .survey-question legend{font-size:18px;line-height:1.5}
 .survey-options label{font-size:16px;min-height:48px}
 .survey-options input{width:18px;height:18px;flex:none}
+.research-details>details>summary{align-items:center}
+.research-details>details>summary>span{width:24px;flex:none;text-align:center}
 
 @media(max-width:1000px){
   .quiz-layout{grid-template-columns:minmax(0,1fr)}
