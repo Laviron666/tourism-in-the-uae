@@ -1,0 +1,10 @@
+{
+  "name": "tourism-in-the-uae",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tourism in the UAE — interactive Russian-language educational website",
+  "scripts": {
+    "dev": "node server.cjs",
+    "check": "node --check app.js && node --check questions.js && node --check server.cjs"
+  }
+}

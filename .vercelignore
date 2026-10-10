@@ -1,0 +1,6 @@
+.git
+.vercel
+node_modules
+server.cjs
+README.md
+*.log
