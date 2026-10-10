@@ -9,3 +9,124 @@
 @media(max-width:400px){.quiz-sidebar{grid-template-columns:1fr}.desert-card{height:220px;min-height:0}.hero-actions{gap:16px}.hero-actions .text-link{font-size:10px}.hero-meta{gap:17px}.hero-meta>span+span{padding-left:17px}.hero-meta strong{font-size:17px}.stat-head{flex-wrap:wrap}.quiz-topline{font-size:10px}.topic-pill{font-size:8px}.destination-tabs button{font-size:9px;gap:5px}.quiz-bottom>span{display:none}}
 @media(max-width:760px){.hero-image-caption{bottom:50px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button,.progress-track>span{transition:none}.button:active{transform:none}}
+
+/* Readable quiz text and comfortable touch layouts. */
+#question-text{font-size:32px;line-height:1.4;letter-spacing:-.5px;margin-bottom:28px;overflow-wrap:break-word}
+.answer-options{gap:12px}
+.answer-option{min-height:76px;padding:18px;gap:16px;border-radius:10px}
+.answer-letter{width:32px;height:32px;font-size:14px}
+.answer-label{font-size:18px;line-height:1.55;min-width:0;flex:1;overflow-wrap:break-word}
+.answer-check{font-size:19px}
+.quiz-topline{font-size:15px;flex-wrap:wrap}
+.topic-pill{font-size:12px}
+.hint{font-size:14px;padding:0 16px}
+.hint summary{min-height:48px}
+.hint p{padding-bottom:14px;margin-top:0}
+.back-button{font-size:14px;min-height:48px;padding-inline:10px}
+.quiz-bottom>span{font-size:12px}
+.quiz-bottom .button{font-size:15px;min-height:52px}
+.result-header>p,.review-item p{font-size:16px;line-height:1.7}
+.review-item summary{font-size:17px;line-height:1.6}
+.review-status{font-size:21px}
+.review-heading{font-size:23px}
+.result-actions .button{font-size:15px;min-height:52px}
+.survey-question legend{font-size:18px;line-height:1.5}
+.survey-options label{font-size:16px;min-height:48px}
+.survey-options input{width:18px;height:18px;flex:none}
+
+@media(max-width:1000px){
+  .quiz-layout{grid-template-columns:minmax(0,1fr)}
+  .quiz-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .desert-card{margin:0;height:100%;min-height:260px}
+  .expect-card li{font-size:13px;line-height:1.7}
+  .expect-note p{font-size:12px}
+}
+@media(max-width:760px){
+  body{font-size:16px}
+  .container{width:calc(100% - 32px)}
+  .site-header{min-height:84px;height:auto;padding-block:16px;gap:12px}
+  .site-header nav{gap:12px;font-size:13px}
+  .site-header nav>a{min-height:44px;display:inline-flex;align-items:center}
+  .site-header nav>a:nth-child(2){display:none}
+  .hero-tagline{font-size:14px;line-height:1.7}
+  .hero h1 em{margin-right:.2em}
+  .hero-description,.section-heading>p{font-size:15px;line-height:1.8}
+  .hero-actions{flex-wrap:wrap;gap:16px}
+  .hero-actions .button,.closing .button{font-size:15px;min-height:52px}
+  .hero-actions .text-link{font-size:14px;min-height:44px;display:inline-flex;align-items:center}
+  .hero-meta{font-size:12px;gap:16px;flex-wrap:wrap}
+  .hero-meta>span+span{padding-left:16px}
+  .hero-visual{height:390px}
+  .section{padding-block:44px}
+  .quiz-card{padding:24px 18px;border-radius:12px;min-width:0}
+  #question-text{font-size:25px;line-height:1.45;letter-spacing:-.3px;margin-bottom:24px}
+  .quiz-topline{font-size:14px;gap:8px}
+  .topic-pill{font-size:11px;max-width:100%}
+  .progress-track{height:6px;margin:18px 0 24px}
+  .answer-option{align-items:flex-start;min-height:72px;padding:16px 34px 16px 12px;gap:12px}
+  .answer-label{font-size:17px;line-height:1.6}
+  .answer-letter{width:28px;height:28px;font-size:13px;margin-top:1px}
+  .answer-check{position:absolute;right:12px;top:17px;font-size:17px}
+  .hint{margin-top:20px;font-size:14px;padding-inline:12px}
+  .quiz-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:18px;margin-top:22px}
+  .quiz-bottom>span{display:none}
+  .back-button{border:1px solid var(--line);border-radius:7px;min-height:52px;background:var(--milk);font-size:15px}
+  .quiz-bottom .button{min-width:0;padding:14px 16px;font-size:16px}
+  .quiz-sidebar{grid-template-columns:1fr;gap:16px}
+  .expect-card{padding:24px}
+  .expect-card h3{font-size:24px}
+  .expect-card li{font-size:14px}
+  .expect-card li>span{font-size:12px}
+  .expect-note p{font-size:13px}
+  .desert-card{height:240px;min-height:0}
+  .desert-card p{font-size:18px}
+  .quiz-footnote{font-size:12px;line-height:1.7}
+  .destination-tabs{gap:12px;flex-wrap:wrap}
+  .destination-tabs button{font-size:14px;min-height:48px;gap:12px}
+  .destination-panel{padding-right:0}
+  .destination-panel p,.city-highlights>div{font-size:15px;line-height:1.8}
+  .city-number{display:none}
+  .tourism-types>span{font-size:12px;padding:8px 12px}
+  .research-story>p:not(.large-copy),.factor-list p{font-size:15px;line-height:1.8}
+  .factor-list h3{font-size:16px;line-height:1.5}
+  .factor-list>div{gap:14px}
+  .stats-card{padding:24px 20px}
+  .stat-head{flex-wrap:wrap}
+  .growth{font-size:11px}
+  .stats-card>p{font-size:14px}
+  .source-note{font-size:12px!important;overflow-wrap:anywhere}
+  .bar-chart>div>span,.bar-chart>div>span:last-child{font-size:12px}
+  .research-details>details>summary{font-size:16px;line-height:1.6;padding-block:20px}
+  .details-body{font-size:15px;overflow-wrap:break-word}
+  .details-body .text-link{font-size:14px}
+  table{font-size:14px;min-width:580px}
+  .survey-options{display:grid;grid-template-columns:1fr}
+  .survey-options label{padding:12px;font-size:16px;gap:12px}
+  .survey-status{font-size:14px}
+  #survey-form>.button{width:100%;min-height:52px;font-size:15px}
+  .result-header h3{font-size:23px}
+  .result-header>p,.review-item p{font-size:16px}
+  .result-actions{display:grid;grid-template-columns:1fr}
+  .review-item summary{font-size:16px}
+  .closing{gap:16px}
+  .closing>div{min-width:0}
+  .closing .button{margin-left:0;width:100%}
+  .site-footer p{font-size:12px}
+  .site-footer .text-link{font-size:14px;min-height:44px;display:inline-flex;align-items:center}
+}
+@media(max-width:480px){
+  .site-header nav>a:first-child{display:none}
+  .hero h1{font-size:clamp(32px,8.5vw,40px);letter-spacing:-1px}
+  .hero-actions{display:grid;grid-template-columns:1fr;width:100%}
+  .hero-actions .text-link{justify-content:center;font-size:14px}
+  .hero-meta{gap:12px;font-size:11px}
+  .hero-meta>span+span{padding-left:12px}
+  .hero-meta strong{font-size:19px}
+  .image-location{right:18px;line-height:1.7;font-size:7px}
+  .hero-visual{height:350px}
+  .destination-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  .destination-tabs button{justify-content:space-between;font-size:14px}
+  .quiz-card{padding-inline:15px}
+  #question-text{font-size:24px}
+  .answer-label{font-size:17px}
+}

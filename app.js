@@ -63,6 +63,7 @@ function renderQuestion(focus = false) {
   if (focus) {
     $('question-text').tabIndex = -1;
     $('question-text').focus({preventScroll:true});
+    if (matchMedia('(max-width: 1000px)').matches) $('quiz-card').scrollIntoView({block:'start',behavior:'instant'});
     $('quiz-announcement').textContent = `Вопрос ${current + 1} из ${QUESTIONS.length}`;
     animateContent($('question-content'));
   }
